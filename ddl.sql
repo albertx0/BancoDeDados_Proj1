@@ -1,78 +1,78 @@
 CREATE TABLE "Aluno" (
-  "nome_aluno" varchar,
-  "sobrenome_aluno" varchar,
-  "RA_aluno" varchar PRIMARY KEY,
-  "nome_depart" varchar,
+  "nome_aluno" varchar(255),
+  "sobrenome_aluno" varchar(255),
+  "ra_aluno" varchar(255) PRIMARY KEY,
+  "nome_departamento" varchar(255),
   "semestre" integer
 );
 
 CREATE TABLE "Departamento" (
-  "nome_depart" varchar PRIMARY KEY,
-  "codigo" varchar
+  "nome_departamento" varchar(255) PRIMARY KEY,
+  "codigo" varchar(255)
 );
 
 CREATE TABLE "Professor" (
-  "nome_prof" varchar,
-  "sobrenome_prof" varchar,
-  "RA_professor" varchar PRIMARY KEY,
-  "nome_depart" varchar,
-  "disciplinas" varchar
+  "nome_professor" varchar(255),
+  "sobrenome_professor" varchar(255),
+  "ra_professor" varchar(255) PRIMARY KEY,
+  "nome_departamento" varchar(255),
+  "disciplinas" varchar(255)
 );
 
 CREATE TABLE "Disciplina" (
-  "id_disc" varchar PRIMARY KEY,
-  "nome_disc" varchar,
-  "nome_prof" varchar,
-  "nome_depart" varchar
+  "id_disciplina" varchar(255) PRIMARY KEY,
+  "nome_disciplina" varchar(255),
+  "ra_professor" varchar(255),
+  "nome_departamento" varchar(255)
 );
 
 CREATE TABLE "Historico_escolar" (
-  "nome_aluno" varchar,
-  "sobrenome_aluno" varchar,
-  "media" floating PRIMARY KEY,
-  "ra_aluno" varchar,
-  "id_disc" varchar,
-  "data" date
+  "ra_aluno" varchar(255),
+  "id_disciplina" varchar(255),
+  "media" FLOAT,
+  "data" date,
+  PRIMARY KEY ("ra_aluno", "id_disciplina")
 );
 
 CREATE TABLE "Historico_Professor" (
-  "nome_prof" varchar,
-  "sobrenome_prof" varchar,
-  "ra_prof" varchar,
-  "id_disc" varchar,
-  "data" date
+  "ra_professor" varchar(255),
+  "id_disciplina" varchar(255),
+  "data" date,
+  PRIMARY KEY ("ra_professor", "id_disciplina")
 );
 
 CREATE TABLE "TCC" (
-  "nome_trabalho" varchar PRIMARY KEY,
-  "id_tcc" varchar,
+  "nome_trabalho" varchar(255),
+  "id_tcc" varchar(255) PRIMARY KEY,
   "data" date,
-  "ra_orientador" varchar
+  "ra_orientador" varchar(255)
 );
 
 CREATE TABLE "TCC_aluno" (
-  "ra_aluno" varchar,
-  "id_tcc" varchar
+  "ra_aluno" varchar(255),
+  "id_tcc" varchar(255)
 );
 
-ALTER TABLE "Aluno" ADD FOREIGN KEY ("nome_depart") REFERENCES "Departamento" ("nome_depart");
+-- Definindo as chaves estrangeiras
 
-ALTER TABLE "Professor" ADD FOREIGN KEY ("nome_depart") REFERENCES "Departamento" ("nome_depart");
+ALTER TABLE "Aluno" ADD FOREIGN KEY ("nome_departamento") REFERENCES "Departamento" ("nome_departamento");
 
-ALTER TABLE "Disciplina" ADD FOREIGN KEY ("nome_prof") REFERENCES "Professor" ("nome_prof");
+ALTER TABLE "Professor" ADD FOREIGN KEY ("nome_departamento") REFERENCES "Departamento" ("nome_departamento");
 
-ALTER TABLE "Disciplina" ADD FOREIGN KEY ("nome_depart") REFERENCES "Departamento" ("nome_depart");
+ALTER TABLE "Disciplina" ADD FOREIGN KEY ("ra_professor") REFERENCES "Professor" ("ra_professor");
 
-ALTER TABLE "Historico_escolar" ADD FOREIGN KEY ("ra_aluno") REFERENCES "Aluno" ("RA_aluno");
+ALTER TABLE "Disciplina" ADD FOREIGN KEY ("nome_departamento") REFERENCES "Departamento" ("nome_departamento");
 
-ALTER TABLE "Historico_escolar" ADD FOREIGN KEY ("id_disc") REFERENCES "Disciplina" ("id_disc");
+ALTER TABLE "Historico_escolar" ADD FOREIGN KEY ("ra_aluno") REFERENCES "Aluno" ("ra_aluno");
 
-ALTER TABLE "Historico_Professor" ADD FOREIGN KEY ("ra_prof") REFERENCES "Professor" ("RA_professor");
+ALTER TABLE "Historico_escolar" ADD FOREIGN KEY ("id_disciplina") REFERENCES "Disciplina" ("id_disciplina");
 
-ALTER TABLE "Historico_Professor" ADD FOREIGN KEY ("id_disc") REFERENCES "Disciplina" ("id_disc");
+ALTER TABLE "Historico_Professor" ADD FOREIGN KEY ("ra_professor") REFERENCES "Professor" ("ra_professor");
 
-ALTER TABLE "TCC" ADD FOREIGN KEY ("ra_orientador") REFERENCES "Professor" ("RA_professor");
+ALTER TABLE "Historico_Professor" ADD FOREIGN KEY ("id_disciplina") REFERENCES "Disciplina" ("id_disciplina");
 
-ALTER TABLE "TCC_aluno" ADD FOREIGN KEY ("ra_aluno") REFERENCES "Aluno" ("RA_aluno");
+ALTER TABLE "TCC" ADD FOREIGN KEY ("ra_orientador") REFERENCES "Professor" ("ra_professor");
+
+ALTER TABLE "TCC_aluno" ADD FOREIGN KEY ("ra_aluno") REFERENCES "Aluno" ("ra_aluno");
 
 ALTER TABLE "TCC_aluno" ADD FOREIGN KEY ("id_tcc") REFERENCES "TCC" ("id_tcc");
