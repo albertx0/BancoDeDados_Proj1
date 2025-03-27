@@ -1,5 +1,5 @@
 CREATE TABLE "Departamento" (
-  "id_departamento" SERIAL PRIMARY KEY,
+  "id_departamento" varchar(20) PRIMARY KEY,
   "nome_departamento" varchar(255) UNIQUE,
   "codigo" varchar(20)
 );
@@ -9,17 +9,17 @@ CREATE TABLE "Aluno" (
   "nome_aluno" varchar(100),  
   "sobrenome_aluno" varchar(100), 
   "email" varchar(255) UNIQUE,
-  "id_departamento" integer NOT NULL,
+  "id_departamento" varchar(20),
   "semestre" integer,
   FOREIGN KEY ("id_departamento") REFERENCES "Departamento" ("id_departamento")
 );
 
 CREATE TABLE "Professor" (
   "ra" varchar(20) PRIMARY KEY,
-  "nome_professor" varchar(100) NOT NULL,
-  "sobrenome_professor" varchar(100) NOT NULL,  
+  "nome_professor" varchar(100),
+  "sobrenome_professor" varchar(100),  
   "email" varchar(255) UNIQUE,
-  "id_departamento" integer NOT NULL,
+  "id_departamento" varchar(20),
   FOREIGN KEY ("id_departamento") REFERENCES "Departamento" ("id_departamento")
 );
 
@@ -28,8 +28,7 @@ CREATE TABLE "Disciplina" (
   "id_disciplina" varchar(20) PRIMARY KEY,
   "nome_disciplina" varchar(255),
   "ra_professor" varchar(20),
-  "id_departamento" integer,
-  "carga_horaria" integer,
+  "id_departamento" varchar(20),
   FOREIGN KEY ("ra_professor") REFERENCES "Professor" ("ra"),
   FOREIGN KEY ("id_departamento") REFERENCES "Departamento" ("id_departamento")
 );
