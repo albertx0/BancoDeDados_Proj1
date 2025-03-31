@@ -1,7 +1,6 @@
 CREATE TABLE "Departamento" (
   "id_departamento" varchar(20) PRIMARY KEY,
   "nome_departamento" varchar(255) UNIQUE,
-  "codigo" varchar(20)
 );
 
 CREATE TABLE "Aluno" (
