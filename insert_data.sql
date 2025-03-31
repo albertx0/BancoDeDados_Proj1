@@ -1,8 +1,8 @@
 -- Departamentos
-INSERT INTO DEPARTAMENTO (id_depart, nome, codigo) VALUES
-(1, 'Ciência da Computação', 'CC'),
-(2, 'Matemática', 'MAT'),
-(3, 'Engenharia', 'ENG');
+INSERT INTO DEPARTAMENTO (id_depart, nome) VALUES
+(1, 'Ciência da Computação'),
+(2, 'Matemática'),
+(3, 'Engenharia');
 
 -- Cursos
 INSERT INTO CURSO (id_curso, nome, id_depart) VALUES
