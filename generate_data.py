@@ -1,164 +1,108 @@
 import random
+import string
+import csv
 from datetime import datetime, timedelta
 
-def gerar_nome():
-    nomes = ["João", "Maria", "Pedro", "Ana", "Carlos", "Juliana", "Lucas", "Fernanda", "Ricardo", "Amanda"]
-    sobrenomes = ["Silva", "Santos", "Oliveira", "Souza", "Pereira", "Costa", "Rodrigues", "Almeida", "Lima", "Gomes"]
-    return f"{random.choice(nomes)} {random.choice(sobrenomes)}"
+disciplinas = {
+    "CIV001": "Mecânica dos Solos",
+    "CIV002": "Concreto Armado",
+    "CIV003": "Estruturas Metálicas",
+    "CIV004": "Hidráulica Aplicada",
+    "CIV005": "Geotecnia",
+    "CIV006": "Topografia e Geodésia",
+    "CIV007": "Materiais de Construção",
+    "CIV008": "Infraestrutura de Transportes",
+    "CIV009": "Saneamento Básico",
+    "CIV010": "Planejamento Urbano",
+    "COMP001": "Estruturas de Dados",
+    "COMP002": "Inteligência Artificial",
+    "COMP003": "Banco de Dados",
+    "COMP004": "Redes de Computadores",
+    "COMP005": "Segurança da Informação",
+    "COMP006": "Sistemas Operacionais",
+    "COMP007": "Computação Gráfica",
+    "COMP008": "Programação Paralela",
+    "COMP009": "Engenharia de Software",
+    "COMP010": "Aprendizado de Máquina",
+}
+
+nomes = ["Ana", "Bruno", "Carlos", "Daniela", "Eduardo", "Fernanda", "Gabriel", "Helena", "Igor", "Juliana"]
+sobrenomes = ["Silva", "Oliveira", "Souza", "Pereira", "Almeida", "Ferreira", "Costa", "Rodrigues", "Martins", "Lima"]
+letras = string.ascii_lowercase
+nums = string.digits
+ids_departamento = {
+    "1": "Engenharia Civil",
+    "2": "Ciencia da Computacao",
+    "3": "Engenharia de Producao",
+    "4": "Engenharia Mecanica"
+}
+
+def gerar_data(inicio="1990-01-01", fim="2055-01-01"):
+    formato = "%Y-%m-%d"
+    data_inicio = datetime.strptime(inicio, formato)
+    data_fim = datetime.strptime(fim, formato)
+    dias_aleatorios = random.randint(0, (data_fim - data_inicio).days)
+    return (data_inicio + timedelta(days=dias_aleatorios)).strftime(formato)
+
+def gerar_email():
+    return "".join(random.choices(letras, k=8)) + "@gmail.com"
 
 def gerar_ra():
-    return f"{random.randint(1000, 9999)}-{random.randint(10000, 99999)}"
+    return "".join(random.choices(nums, k=9))
 
-def gerar_data(min_year=2018, max_year=2023):
-    year = random.randint(min_year, max_year)
-    month = random.randint(1, 12)
-    day = random.randint(1, 28)
-    return f"{year}-{month:02d}-{day:02d}"
+def gerar_aluno():
+    return {"ra": gerar_ra(), "nome_aluno": random.choice(nomes), "sobrenome_aluno": random.choice(sobrenomes), "email": gerar_email(), "id_departamento": str(random.randint(1, 4)), "semestre": random.randint(1, 8)}
 
-def gerar_semestre():
-    ano = random.randint(2018, 2023)
-    semestre = random.randint(1, 2)
-    return f"{ano}.{semestre}"
+def gerar_professor():
+    return {"ra": gerar_ra(), "nome_professor": random.choice(nomes), "sobrenome_professor": random.choice(sobrenomes), "email": gerar_email(), "id_departamento": str(random.randint(1, 4))}
 
-# Gerar departamentos
-departamentos = [
-    (1, "Ciência da Computação", "CC"),
-    (2, "Matemática", "MAT"),
-    (3, "Engenharia", "ENG")
-]
+def gerar_disciplina(professores):
+    codigo_disciplina, nome_disciplina = random.choice(list(disciplinas.items()))
+    professor = random.choice(professores)
+    return {"codigo": codigo_disciplina, "nome": nome_disciplina, "ra_professor": professor["ra"], "id_departamento": professor["id_departamento"]}
 
-# Gerar cursos
-cursos = [
-    (1, "Ciência da Computação", 1),
-    (2, "Engenharia de Software", 1),
-    (3, "Ciência de Dados", 1),
-    (4, "Matemática Aplicada", 2),
-    (5, "Engenharia Civil", 3)
-]
+def gerar_historico_aluno(alunos):
+    historico = []
+    for aluno in alunos:
+        for semestre in range(1, aluno["semestre"] + 1):
+            data_conclusao = gerar_data("2015-01-01", "2025-01-01")
+            for _ in range(5):
+                historico.append({"ra": aluno["ra"], "semestre": semestre, "codigo_disciplina": random.choice(list(disciplinas.keys())), "nota": round(random.uniform(0, 10), 2), "data_conclusao": data_conclusao})
+    return historico
 
-# Gerar disciplinas
-disciplinas = []
-for i in range(1, 31):
-    curso_id = random.choice([1, 2, 3, 4, 5])
-    disciplinas.append((i, f"Disciplina {i}", f"DISC{i:03d}", curso_id))
+def gerar_historico_professor(professores):
+    historico = []
+    for prof in professores:
+        for _ in range(random.randint(1, 8)):
+            historico.append({"ra": prof["ra"], "id_disciplina": random.choice(list(disciplinas.keys())), "data": gerar_data(), "situacao": random.choice(["Lecionando", "Nao lecionando"])});
+    return historico
 
-# Gerar professores
-professores = []
-for i in range(1, 21):
-    dept_id = random.choice([1, 2, 3])
-    professores.append((i, gerar_nome(), dept_id))
+def gerar_tcc(professores, alunos):
+    return [{"id_tcc": "".join(random.choices(nums, k=5)), "nome_trabalho": "".join(random.choices(letras, k=10)), "data": gerar_data(), "ra_orientador": random.choice(professores)["ra"], "status": random.choice(["Em andamento", "Finalizado"])} for _ in range(len(alunos)//2)]
 
-# Gerar alunos
-alunos = []
-for i in range(1, 101):
-    curso_id = random.choice([1, 2, 3, 4, 5])
-    alunos.append((i, gerar_nome().split()[0], gerar_nome().split()[1], gerar_ra(), curso_id, random.randint(1, 10)))
+def gerar_tcc_aluno(alunos, tccs):
+    return [{"ra_aluno": aluno["ra"], "id_tcc": random.choice(tccs)["id_tcc"]} for aluno in alunos]
 
-# Gerar histórico escolar
-historicos = []
-for _ in range(500):
-    aluno_id = random.randint(1, 100)
-    disc_id = random.randint(1, 30)
-    semestre = gerar_semestre()
-    nota = round(random.uniform(0, 10), 2)
-    situacao = "Aprovado" if nota >= 5 else "Reprovado"
-    historicos.append((aluno_id, disc_id, semestre, nota, situacao))
+def gerar_csv(lista, nome_arquivo):
+    if not lista:
+        return
+    with open(nome_arquivo, mode="w", newline="") as arquivo:
+        escritor = csv.DictWriter(arquivo, fieldnames=lista[0].keys())
+        escritor.writeheader()
+        escritor.writerows(lista)
 
-# Gerar TCCs
-tccs = []
-for i in range(1, 31):
-    orientador_id = random.randint(1, 20)
-    data = gerar_data(2022, 2023)
-    tccs.append((i, f"TCC {i}", orientador_id, data))
-
-# Gerar Aluno_TCC
-alunos_tcc = []
-for tcc_id in range(1, 31):
-    num_alunos = random.randint(1, 3)
-    alunos_selecionados = random.sample(range(1, 101), num_alunos)
-    for aluno_id in alunos_selecionados:
-        alunos_tcc.append((tcc_id, aluno_id))
-
-# Gerar Chefes de Departamento
-chefes = [
-    (1, 1, "2020-01-01"),
-    (5, 2, "2021-01-01"),
-    (10, 3, "2019-01-01")
-]
-
-# Gerar Coordenadores de Curso
-coordenadores = [
-    (2, 1, "2020-01-01"),
-    (6, 2, "2021-01-01"),
-    (8, 3, "2019-01-01"),
-    (12, 4, "2020-01-01"),
-    (15, 5, "2021-01-01")
-]
-
-# Gerar Professor_Disciplina
-professores_disciplinas = []
-for semestre in ["2023.1", "2023.2", "2022.1", "2022.2"]:
-    for disc_id in range(1, 31):
-        prof_id = random.randint(1, 20)
-        professores_disciplinas.append((prof_id, disc_id, semestre))
-
-# Gerar arquivo SQL
-with open("insert_data.sql", "w", encoding="utf-8") as f:
-    # Inserir departamentos
-    f.write("-- Departamentos\n")
-    f.write("INSERT INTO DEPARTAMENTO (id_depart, nome, codigo) VALUES\n")
-    f.write(",\n".join([f"({id}, '{nome}', '{codigo}')" for id, nome, codigo in departamentos]) + ";\n\n")
-    
-    # Inserir cursos
-    f.write("-- Cursos\n")
-    f.write("INSERT INTO CURSO (id_curso, nome, id_depart) VALUES\n")
-    f.write(",\n".join([f"({id}, '{nome}', {id_depart})" for id, nome, id_depart in cursos]) + ";\n\n")
-    
-    # Inserir professores
-    f.write("-- Professores\n")
-    f.write("INSERT INTO PROFESSOR (id_prof, nome, sobrenome, id_depart) VALUES\n")
-    f.write(",\n".join([f"({id}, '{nome.split()[0]}', '{nome.split()[1]}', {dept})" for id, nome, dept in professores]) + ";\n\n")
-    
-    # Inserir alunos
-    f.write("-- Alunos\n")
-    f.write("INSERT INTO ALUNO (id_aluno, nome, sobrenome, ra, id_curso, semestre) VALUES\n")
-    f.write(",\n".join([f"({id}, '{nome}', '{sobrenome}', '{ra}', {curso}, {semestre})" for id, nome, sobrenome, ra, curso, semestre in alunos]) + ";\n\n")
-    
-    # Inserir disciplinas
-    f.write("-- Disciplinas\n")
-    f.write("INSERT INTO DISCIPLINA (id_disc, nome, codigo, id_curso) VALUES\n")
-    f.write(",\n".join([f"({id}, '{nome}', '{codigo}', {curso})" for id, nome, codigo, curso in disciplinas]) + ";\n\n")
-    
-    # Inserir histórico escolar
-    f.write("-- Histórico Escolar\n")
-    f.write("INSERT INTO HISTORICO_ESCOLAR (id_aluno, id_disc, semestre, nota, situacao) VALUES\n")
-    f.write(",\n".join([f"({aluno}, {disc}, '{semestre}', {nota}, '{situacao}'" for aluno, disc, semestre, nota, situacao in historicos]) + ";\n\n")
-    
-    # Inserir TCCs
-    f.write("-- TCCs\n")
-    f.write("INSERT INTO TCC (id_tcc, titulo, id_orientador, data_apresentacao) VALUES\n")
-    f.write(",\n".join([f"({id}, '{titulo}', {orientador}, '{data}'" for id, titulo, orientador, data in tccs]) + ";\n\n")
-    
-    # Inserir Aluno_TCC
-    f.write("-- Alunos_TCC\n")
-    f.write("INSERT INTO ALUNO_TCC (id_tcc, id_aluno) VALUES\n")
-    f.write(",\n".join([f"({tcc}, {aluno})" for tcc, aluno in alunos_tcc]) + ";\n\n")
-    
-    # Inserir Chefes de Departamento
-    f.write("-- Chefes de Departamento\n")
-    f.write("INSERT INTO CHEFE_DEPARTAMENTO (id_prof, id_depart, data_inicio) VALUES\n")
-    f.write(",\n".join([f"({prof}, {dept}, '{data}')" for prof, dept, data in chefes]) + ";\n\n")
-    
-    # Inserir Coordenadores de Curso
-    f.write("-- Coordenadores de Curso\n")
-    f.write("INSERT INTO COORDENADOR_CURSO (id_prof, id_curso, data_inicio) VALUES\n")
-    f.write(",\n".join([f"({prof}, {curso}, '{data}')" for prof, curso, data in coordenadores]) + ";\n\n")
-    
-    # Inserir Professor_Disciplina
-    f.write("-- Professores_Disciplinas\n")
-    f.write("INSERT INTO PROFESSOR_DISCIPLINA (id_prof, id_disc, semestre) VALUES\n")
-    f.write(",\n".join([f"({prof}, {disc}, '{semestre}')" for prof, disc, semestre in professores_disciplinas]) + ";\n\n")
-    
-    f.write("COMMIT;\n")
-
-print("Arquivo insert_data.sql gerado com sucesso!")
+if __name__ == "__main__":
+    alunos = [gerar_aluno() for _ in range(5)]
+    professores = [gerar_professor() for _ in range(5)]
+    disciplinas_geradas = [gerar_disciplina(professores) for _ in range(5)]
+    historico_aluno = gerar_historico_aluno(alunos)
+    historico_professores = gerar_historico_professor(professores)
+    tccs = gerar_tcc(professores, alunos)
+    tcc_aluno = gerar_tcc_aluno(alunos, tccs)
+    gerar_csv(alunos, "Aluno.csv")
+    gerar_csv(professores, "Professor.csv")
+    gerar_csv(disciplinas_geradas, "Disciplina.csv")
+    gerar_csv(historico_aluno, "Historico_escolar.csv")
+    gerar_csv(historico_professores, "Historico_Professor.csv")
+    gerar_csv(tccs, "TCC.csv")
+    gerar_csv(tcc_aluno, "TCC_aluno.csv")
