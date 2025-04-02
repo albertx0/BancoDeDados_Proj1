@@ -37,8 +37,12 @@ ids_departamento = {
     "4": "Engenharia Mecanica"
 }
 
-gerados_ras = set()
-
+departamentos = [
+    {"id_departamento" : "1", "nome_departamento" : "Engenharia Civil"}, 
+    {"id_departamento" : "2", "nome_departamento" : "Ciencia da Computacao"}, 
+    {"id_departamento" : "3", "nome_departamento" : "Engenharia de Producao"}, 
+    {"id_departamento" : "4", "nome_departamento" : "Engenharia Mecanica"}, 
+    ]
 def gerar_data(inicio="1990-01-01", fim="2055-01-01"):
     formato = "%Y-%m-%d"
     data_inicio = datetime.strptime(inicio, formato)
@@ -50,47 +54,43 @@ def gerar_email():
     return "".join(random.choices(letras, k=8)) + "@gmail.com"
 
 def gerar_ra():
-    while True:
-        novo_ra = "".join(random.choices(nums, k=9))
-        if novo_ra not in gerados_ras:
-            gerados_ras.add(novo_ra)
-            return novo_ra
+    return "".join(random.choices(nums, k=9))
 
 def gerar_aluno():
-    return {"ra": gerar_ra(), "nome_aluno": random.choice(nomes), "sobrenome_aluno": random.choice(sobrenomes), "email": gerar_email(), "id_departamento": random.choice(list(ids_departamento.keys())), "semestre": random.randint(1, 8)}
+    return {"ra": gerar_ra(), "nome_aluno": random.choice(nomes), "sobrenome_aluno": random.choice(sobrenomes), "email": gerar_email(), "id_departamento": str(random.randint(1, 4)), "semestre": random.randint(1, 8)}
 
 def gerar_professor():
-    return {"ra": gerar_ra(), "nome_professor": random.choice(nomes), "sobrenome_professor": random.choice(sobrenomes), "email": gerar_email(), "id_departamento": random.choice(list(ids_departamento.keys()))}
+    return {"ra": gerar_ra(), "nome_professor": random.choice(nomes), "sobrenome_professor": random.choice(sobrenomes), "email": gerar_email(), "id_departamento": str(random.randint(1, 4))}
 
 def gerar_disciplina(professores):
-    codigo_disciplina, nome_disciplina = random.choice(list(disciplinas.items()))
-    professores_do_departamento = [p for p in professores if p["id_departamento"] == codigo_disciplina[:3]]
-    professor = random.choice(professores_do_departamento) if professores_do_departamento else random.choice(professores)
-    return {"id_disciplina": codigo_disciplina, "nome_disciplina": nome_disciplina, "ra_professor": professor["ra"], "id_departamento": professor["id_departamento"]}
+    disciplinas_disponiveis = list(disciplinas.items())
+    codigo_disciplina, nome_disciplina = random.choice(disciplinas_disponiveis)
+    professor = random.choice(professores)
+    disciplina = {"id_disciplina": codigo_disciplina, "nome_disciplina": nome_disciplina, "ra_professor": professor["ra"], "id_departamento": professor["id_departamento"]}
+    disciplinas.pop(codigo_disciplina)
+    return disciplina
 
 def gerar_historico_aluno(alunos):
     historico = []
     for aluno in alunos:
-        disciplinas_cursadas = set()
         for semestre in range(1, aluno["semestre"] + 1):
-            data = gerar_data("2015-01-01", "2025-01-01")
-            while True:
-                disciplina = random.choice(list(disciplinas.keys()))
-                if disciplina not in disciplinas_cursadas:
-                    disciplinas_cursadas.add(disciplina)
-                    historico.append({"ra_aluno": aluno["ra"], "id_disciplina": disciplina, "media": round(random.uniform(0, 10), 2), "data": data, "situacao": random.choice(["Aprovado", "Reprovado"])});
-                    break
+            data_conclusao = gerar_data("2015-01-01", "2025-01-01")
+            for _ in range(5):
+                historico.append({"ra_aluno": aluno["ra"], "id_disciplina": random.choice(list(disciplinas.keys())), "media": round(random.uniform(0, 10), 2), "data": data_conclusao, "situacao" : random.choice(["Aprovado", "Reprovado", "Cursando"])})
+    return historico
+
+def gerar_historico_professor(professores):
+    historico = []
+    for prof in professores:
+        for _ in range(random.randint(1, 8)):
+            historico.append({"ra_professor": prof["ra"], "id_disciplina": random.choice(list(disciplinas.keys())), "data": gerar_data(), "situacao": random.choice(["Lecionando", "Nao lecionando"])});
     return historico
 
 def gerar_tcc(professores, alunos):
-    tccs = []
-    alunos_tcc = random.sample(alunos, len(alunos)//2)
-    for aluno in alunos_tcc:
-        tccs.append({"id_tcc": "".join(random.choices(nums, k=5)), "nome_trabalho": "".join(random.choices(letras, k=10)), "data": gerar_data(), "ra_orientador": random.choice(professores)["ra"], "status": random.choice(["Em andamento", "Finalizado"])})
-    return tccs
+    return [{"id_tcc": "".join(random.choices(nums, k=5)), "nome_trabalho": "".join(random.choices(letras, k=10)), "data": gerar_data(), "ra_orientador": random.choice(professores)["ra"], "status": random.choice(["Em andamento", "Finalizado"])} for _ in range(len(alunos)//2)]
 
 def gerar_tcc_aluno(alunos, tccs):
-    return [{"ra_aluno": aluno["ra"], "id_tcc": tccs[i]["id_tcc"]} for i, aluno in enumerate(alunos[:len(tccs)])]
+    return [{"ra_aluno": aluno["ra"], "id_tcc": random.choice(tccs)["id_tcc"]} for aluno in alunos]
 
 def gerar_csv(lista, nome_arquivo):
     if not lista:
@@ -101,15 +101,21 @@ def gerar_csv(lista, nome_arquivo):
         escritor.writerows(lista)
 
 if __name__ == "__main__":
+    disciplinas_original = disciplinas.copy()
     alunos = [gerar_aluno() for _ in range(5)]
     professores = [gerar_professor() for _ in range(5)]
-    disciplinas_geradas = [gerar_disciplina(professores) for _ in range(5)]
+    disciplinas_geradas = []
+    for _ in range(min(5, len(disciplinas))):
+        disciplinas_geradas.append(gerar_disciplina(professores))
     historico_aluno = gerar_historico_aluno(alunos)
+    historico_professores = gerar_historico_professor(professores)
     tccs = gerar_tcc(professores, alunos)
     tcc_aluno = gerar_tcc_aluno(alunos, tccs)
     gerar_csv(alunos, "Aluno.csv")
+    gerar_csv(departamentos, "Departamentos.csv")
     gerar_csv(professores, "Professor.csv")
     gerar_csv(disciplinas_geradas, "Disciplina.csv")
     gerar_csv(historico_aluno, "Historico_escolar.csv")
+    gerar_csv(historico_professores, "Historico_Professor.csv")
     gerar_csv(tccs, "TCC.csv")
     gerar_csv(tcc_aluno, "TCC_aluno.csv")
