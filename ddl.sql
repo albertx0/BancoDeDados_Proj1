@@ -47,7 +47,7 @@ CREATE TABLE "Historico_Professor" (
   "ra_professor" varchar(20),
   "id_disciplina" varchar(20),
   "data" date,
-  "semestre" varchar(10),
+  "situacao" varchar(20),
   PRIMARY KEY ("ra_professor", "id_disciplina", "data"),
   FOREIGN KEY ("ra_professor") REFERENCES "Professor" ("ra"),
   FOREIGN KEY ("id_disciplina") REFERENCES "Disciplina" ("id_disciplina")
