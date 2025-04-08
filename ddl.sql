@@ -1,3 +1,9 @@
+CREATE TABLE "Professor" (
+  "ra" varchar(20) PRIMARY KEY,
+  "nome_professor" varchar(100),
+  "sobrenome_professor" varchar(100),  
+);
+
 CREATE TABLE "Departamento" (
   "id_departamento" varchar(20) PRIMARY KEY,
   "nome_departamento" varchar(255) UNIQUE,
@@ -16,21 +22,12 @@ CREATE TABLE "Aluno" (
   "ra" varchar(20) PRIMARY KEY,
   "nome_aluno" varchar(100),  
   "sobrenome_aluno" varchar(100), 
-  "email" varchar(255) UNIQUE,
   "id_curso" varchar(20),
+  "id_departamento" varchar(20),  -- Added this field for referencing Departamento
   "semestre" integer,
+  FOREIGN KEY ("id_curso") REFERENCES "Curso" ("id_curso"),
   FOREIGN KEY ("id_departamento") REFERENCES "Departamento" ("id_departamento")
 );
-
-CREATE TABLE "Professor" (
-  "ra" varchar(20) PRIMARY KEY,
-  "nome_professor" varchar(100),
-  "sobrenome_professor" varchar(100),  
-  "email" varchar(255) UNIQUE,
-  "id_departamento" varchar(20),
-  FOREIGN KEY ("id_departamento") REFERENCES "Departamento" ("id_departamento")
-);
-
 
 CREATE TABLE "Disciplina" (
   "id_disciplina" varchar(20) PRIMARY KEY,
