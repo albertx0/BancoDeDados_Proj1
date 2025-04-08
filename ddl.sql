@@ -1,8 +1,15 @@
 CREATE TABLE "Departamento" (
   "id_departamento" varchar(20) PRIMARY KEY,
   "nome_departamento" varchar(255) UNIQUE,
-  "chefe_departamento" varchar(255),
-  "cordenador_curso" varchar(255)
+  "ra_chefe_departamento" varchar(255),
+  FOREIGN KEY ("ra_chefe_departamento") REFERENCES "Professor" ("ra")
+);
+
+CREATE TABLE "Curso" (
+  "id_curso" varchar(20) PRIMARY KEY,
+  "nome_curso" varchar(255) UNIQUE,
+  "ra_cordenador_curso" varchar(255),
+  FOREIGN KEY ("ra_cordenador_curso") REFERENCES "Professor" ("ra")
 );
 
 CREATE TABLE "Aluno" (
@@ -10,7 +17,7 @@ CREATE TABLE "Aluno" (
   "nome_aluno" varchar(100),  
   "sobrenome_aluno" varchar(100), 
   "email" varchar(255) UNIQUE,
-  "id_departamento" varchar(20),
+  "id_curso" varchar(20),
   "semestre" integer,
   FOREIGN KEY ("id_departamento") REFERENCES "Departamento" ("id_departamento")
 );
