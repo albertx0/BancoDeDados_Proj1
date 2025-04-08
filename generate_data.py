@@ -38,10 +38,10 @@ ids_departamento = {
 }
 
 departamentos = [
-    {"id_departamento": "1", "nome_departamento": "Engenharia Civil"},
-    {"id_departamento": "2", "nome_departamento": "Ciencia da Computacao"},
-    {"id_departamento": "3", "nome_departamento": "Engenharia de Producao"},
-    {"id_departamento": "4", "nome_departamento": "Engenharia Mecanica"},
+    {"id_departamento": "1", "nome_departamento": "Engenharia Civil", "chefe_departamento" : "", "cordenador_curso" : ""},
+    {"id_departamento": "2", "nome_departamento": "Ciencia da Computacao", "chefe_departamento" : "", "cordenador_curso" : ""},
+    {"id_departamento": "3", "nome_departamento": "Engenharia de Producao", "chefe_departamento" : "", "cordenador_curso" : ""},
+    {"id_departamento": "4", "nome_departamento": "Engenharia Mecanica", "chefe_departamento" : "", "cordenador_curso" : ""}
 ]
 
 def gerar_data(inicio="1990-01-01", fim="2055-01-01"):
