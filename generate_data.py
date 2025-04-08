@@ -139,6 +139,14 @@ def gerar_tcc_aluno(alunos, tccs):
         "id_tcc": random.choice(tccs)["id_tcc"]
     } for aluno in alunos]
 
+def atribuir_chefes_e_coordenadores(professores):
+    for departamento in departamentos:
+        professores_departamento = [prof for prof in professores if prof['id_departamento'] == departamento['id_departamento']]
+        chefe = random.choice(professores_departamento)
+        departamento["chefe_departamento"] = f"{chefe['nome_professor']} {chefe['sobrenome_professor']}"
+        coordenador = random.choice(professores_departamento)
+        departamento["cordenador_curso"] = f"{coordenador['nome_professor']} {coordenador['sobrenome_professor']}"
+
 def gerar_csv(lista, nome_arquivo):
     if not lista:
         return
@@ -156,10 +164,14 @@ if __name__ == "__main__":
         d = gerar_disciplina(professores)
         if d:
             disciplinas_geradas.append(d)
+    
+    atribuir_chefes_e_coordenadores(professores)
+    
     historico_aluno = gerar_historico_aluno(alunos, disciplinas_geradas)
     historico_professores = gerar_historico_professor(professores, disciplinas_geradas)
     tccs = gerar_tcc(professores, alunos)
     tcc_aluno = gerar_tcc_aluno(alunos, tccs)
+    
     gerar_csv(alunos, "Aluno.csv")
     gerar_csv(departamentos, "Departamentos.csv")
     gerar_csv(professores, "Professor.csv")
