@@ -1,7 +1,7 @@
 CREATE TABLE "Professor" (
   "ra" varchar(20) PRIMARY KEY,
   "nome_professor" varchar(100),
-  "sobrenome_professor" varchar(100),  
+  "sobrenome_professor" varchar(100) 
 );
 
 CREATE TABLE "Departamento" (
