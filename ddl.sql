@@ -39,7 +39,7 @@ CREATE TABLE "Historico_escolar" (
   "ra_aluno" varchar(20),
   "id_disciplina" varchar(20),
   "media" float,
-  "semestre" integer PRIMARY KEY,
+  "semestre" integer,
   "situacao" varchar(20),
   FOREIGN KEY ("ra_aluno") REFERENCES "Aluno" ("ra"),
   FOREIGN KEY ("id_disciplina") REFERENCES "Disciplina" ("id_disciplina")
