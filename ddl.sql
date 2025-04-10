@@ -23,9 +23,7 @@ CREATE TABLE "Aluno" (
   "nome_aluno" varchar(100),  
   "sobrenome_aluno" varchar(100), 
   "id_curso" varchar(20),
-  "semestre" integer,
-  FOREIGN KEY ("id_curso") REFERENCES "Curso" ("id_curso"),
-  FOREIGN KEY ("id_departamento") REFERENCES "Departamento" ("id_departamento")
+  "semestre" integer
 );
 
 CREATE TABLE "Disciplina" (
@@ -43,7 +41,7 @@ CREATE TABLE "Historico_escolar" (
   "media" float,
   "semestre" integer,
   "situacao" varchar(20),
-  PRIMARY KEY ("ra_aluno", "id_disciplina", "data"),
+  PRIMARY KEY ("ra_aluno", "id_disciplina", "semestre"),
   FOREIGN KEY ("ra_aluno") REFERENCES "Aluno" ("ra"),
   FOREIGN KEY ("id_disciplina") REFERENCES "Disciplina" ("id_disciplina")
 );
