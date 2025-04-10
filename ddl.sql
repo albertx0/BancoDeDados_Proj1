@@ -23,7 +23,6 @@ CREATE TABLE "Aluno" (
   "nome_aluno" varchar(100),  
   "sobrenome_aluno" varchar(100), 
   "id_curso" varchar(20),
-  "id_departamento" varchar(20),  -- Added this field for referencing Departamento
   "semestre" integer,
   FOREIGN KEY ("id_curso") REFERENCES "Curso" ("id_curso"),
   FOREIGN KEY ("id_departamento") REFERENCES "Departamento" ("id_departamento")
@@ -42,7 +41,7 @@ CREATE TABLE "Historico_escolar" (
   "ra_aluno" varchar(20),
   "id_disciplina" varchar(20),
   "media" float,
-  "data" date,
+  "semestre" integer,
   "situacao" varchar(20),
   PRIMARY KEY ("ra_aluno", "id_disciplina", "data"),
   FOREIGN KEY ("ra_aluno") REFERENCES "Aluno" ("ra"),
@@ -71,8 +70,6 @@ CREATE TABLE "TCC" (
 CREATE TABLE "TCC_aluno" (
   "ra_aluno" varchar(20),
   "id_tcc" varchar(20),
-  "funcao" varchar(50),
-  PRIMARY KEY ("ra_aluno", "id_tcc"),
   FOREIGN KEY ("ra_aluno") REFERENCES "Aluno" ("ra"),
   FOREIGN KEY ("id_tcc") REFERENCES "TCC" ("id_tcc")
 );
