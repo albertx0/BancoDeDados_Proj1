@@ -8,8 +8,8 @@ faker = Faker("pt-BR")
 nums = string.digits
 # ///////////////////////////
 # intervalo dos dados
-qtd_aluno = 15
-qtd_prof = 10
+qtd_aluno = 40
+qtd_prof = 20
 qtd_tcc = (qtd_aluno//2)
 # ///////////////////////////
 
@@ -21,6 +21,7 @@ qtd_tcc = (qtd_aluno//2)
 NOMES = set()
 RA = set()
 TCC = set()
+DISCIPLINAS_CURSOS = {} 
 # ///////////////////////////
 
 DEPARTAMENTOS = {
@@ -185,18 +186,20 @@ def gerar_cursos():
 
 def gerar_disciplinas():
     codigo_disciplinas = list(DISCIPLINAS.keys())
-    
     disciplinas = []
 
-    for i in range(len(codigo_disciplinas)):
+    for codigo in codigo_disciplinas:
+        nome = DISCIPLINAS[codigo]
+        cursos_possiveis = random.sample(list(CURSOS.keys()), k=random.randint(1, 2))
+        DISCIPLINAS_CURSOS[codigo] = cursos_possiveis
+
         disciplinas.append({
-            "id_disciplina" : codigo_disciplinas[i],
-            "nome_disciplina" : DISCIPLINAS[codigo_disciplinas[i]],
-            # nao vai dar conflito com ra de alunos
-            # pois o codigo ate aq somente gerou ras de profs
-            "ra_professor" : faker.random_element(list(RA)),
-            "id_departamento" : codigo_disciplinas[i][:3]
+            "id_disciplina": codigo,
+            "nome_disciplina": nome,
+            "ra_professor": faker.random_element(list(RA)),
+            "id_departamento": codigo[:3]
         })
+
     return disciplinas
 
 def gerar_tcc():
@@ -245,42 +248,56 @@ def gerar_alunos():
 def gerar_historico_aluno(Aluno, Disciplina):
     historico_aluno = []
 
-    for i in range(len(Aluno)):
-        selecionadas = []
-        ra = Aluno[i]["ra"]
-        SEMESTRE = Aluno[i]["semestre"]
-        qtd_disciplinas = 4*SEMESTRE
+    disciplina_por_id = {d["id_disciplina"]: d for d in Disciplina}
 
-        while len(selecionadas) < qtd_disciplinas:
-            disciplina = faker.random_element(Disciplina)
+    for aluno in Aluno:
+        selecionadas = []
+        ra = aluno["ra"]
+        curso = aluno["id_curso"]
+        semestre = aluno["semestre"]
+        qtd_disciplinas = 4 * semestre
+
+        # filtra disciplinas de acordo com o curso do aluno
+        disciplinas_validas = [
+            d for d in Disciplina
+            if curso in DISCIPLINAS_CURSOS.get(d["id_disciplina"], [])
+        ]
+
+        if not disciplinas_validas:
+            continue  
+
+        while len(selecionadas) < qtd_disciplinas and len(selecionadas) < len(disciplinas_validas):
+            disciplina = faker.random_element(disciplinas_validas)
             idd = disciplina["id_disciplina"]
 
             if idd in selecionadas:
                 continue
-            selecionadas.append(idd)
 
-        for idd in selecionadas:
+            selecionadas.append(idd)
             media = random.uniform(0, 10)
             situacao = "Aprovado" if media >= 5.0 else "Reprovado"
-            semestre = random.randint(1, SEMESTRE) 
+            semestre = random.randint(1, semestre)
 
             historico_aluno.append({
-                "ra_aluno" : ra,
-                "id_disciplina" : idd,
-                "media" : media,
-                "semestre" : semestre,
-                "situacao" : situacao
+                "ra_aluno": ra,
+                "id_disciplina": idd,
+                "media": media,
+                "semestre": semestre,
+                "situacao": situacao
             })
 
+            # se reprovado, repete com nova nota
+            # no semestre seguinte
             if media < 5:
                 historico_aluno.append({
-                    "ra_aluno" : ra,
-                    "id_disciplina" : idd,
-                    "media" : random.uniform(5, 10),
-                    "semestre" : semestre,
-                    "situacao" : "Aprovado"
+                    "ra_aluno": ra,
+                    "id_disciplina": idd,
+                    "media": random.uniform(5, 10),
+                    "semestre": semestre+1,
+                    "situacao": "Aprovado"
                 })
-        return historico_aluno
+
+    return historico_aluno
 
 def gerar_tcc_aluno(Aluno, TCC):
     tcc_aluno = []
