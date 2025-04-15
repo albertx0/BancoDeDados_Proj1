@@ -63,6 +63,9 @@ Este projeto consiste em um **banco de dados relacional** para gerenciar informa
 # ![image (1)](https://github.com/user-attachments/assets/0df05408-86db-4703-b3a8-27fc81d3c62d)
 
 
+
 # 🧩 Modelo Relacional (MR - 3ª Forma Normal)
+# ![MR](https://github.com/user-attachments/assets/93b0c1c6-3ae5-41f7-a9c6-f65cec99f372)
+
 
 
