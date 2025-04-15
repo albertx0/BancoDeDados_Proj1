@@ -8,8 +8,8 @@ faker = Faker("pt-BR")
 nums = string.digits
 # ///////////////////////////
 # intervalo dos dados
-qtd_aluno = 40
-qtd_prof = 20
+qtd_aluno = 200
+qtd_prof = 80
 qtd_tcc = (qtd_aluno//2)
 # ///////////////////////////
 
