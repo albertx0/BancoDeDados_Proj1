@@ -160,5 +160,12 @@
 
 -- /////////////////////////////////////////////////////
 
+-- 15) Listar os RAs dos professores que ensinam mais de uma discplina.
+
+--SELECT p.ra, COUNT(d.id_disciplina) AS numero_discplina
+--FROM "Professor" p
+--INNER JOIN "Disciplina" d ON p.ra = d.ra_professor
+--GROUP BY p.ra
+--HAVING COUNT(d.id_disciplina) > 1;
 
 -- /////////////////////////////////////////////////////
