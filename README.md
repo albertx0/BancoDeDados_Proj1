@@ -42,11 +42,14 @@ Este projeto consiste em um **banco de dados relacional** para gerenciar informa
     psql -U [usuário] -d universidade -f schema.sql
     ```
 
-3. **(Opcional) Popule o banco com dados fictícios:**
+3. ** Popule o banco com dados fictícios:**
 
     ```bash
     python gerarDados.py
     ```
+
+   > **Observação**: O script `gerarDados.py` realiza tanto a geração de dados fictícios como a validação das informações inseridas.
+
 
 4. **Execute as consultas SQL:**
 
