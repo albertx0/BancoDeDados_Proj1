@@ -35,6 +35,24 @@
 
 -- 3)
 
+--SELECT DISTINCT
+--  disc.nome_disciplina
+--  ,disc.id_disciplina
+--FROM "Aluno" as aluno
+--JOIN "Historico_escolar" AS his ON his.ra_aluno = aluno.ra
+--JOIN "Disciplina" AS disc ON disc.id_disciplina = his.id_disciplina
+--WHERE aluno.semestre = 8 AND aluno.id_curso = 'EELEC'
+--ORDER BY disc.nome_disciplina
+
+--SELECT DISTINCT
+--  disc.nome_disciplina
+--  ,disc.id_disciplina
+--FROM "Aluno" as aluno
+--JOIN "Historico_escolar" AS his ON his.ra_aluno = aluno.ra
+--JOIN "Disciplina" AS disc ON disc.id_disciplina = his.id_disciplina
+--WHERE aluno.semestre = 8 AND aluno.id_curso = 'CC'
+--ORDER BY disc.nome_disciplina
+
 -- /////////////////////////////////////////////////////
 
 -- 4) Para um determinado aluno, mostre os códigos e nomes das diciplinas já cursadas 
