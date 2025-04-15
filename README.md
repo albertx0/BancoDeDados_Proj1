@@ -45,7 +45,7 @@ Este projeto consiste em um **banco de dados relacional** para gerenciar informa
 3. **(Opcional) Popule o banco com dados fictícios:**
 
     ```bash
-    python populate_data.py
+    python gerarDados.py
     ```
 
 4. **Execute as consultas SQL:**
