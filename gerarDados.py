@@ -1,333 +1,1224 @@
-from faker import Faker
+from faker import Faker 
+
+
 import string
-import csv 
-import os
+
+
 import random
 
+
+import csv
+
+import os
+
+
+
+
 faker = Faker("pt-BR")
+
 nums = string.digits
 
-# /////////////////////
+
+# ///////////////////////////
+
+
 # intervalo dos dados
-qtd_produtoras = 3
-qtd_atores = 10
-qtd_diretores = 5
-qtd_series = 5
-# /////////////////////
 
-# utilizacao de sets globais
-# para evitar a repeticao de elementos
-# unicos
 
-ID_PRODUTORAS = set()
-ID_FUNCIONARIOS = set()
-ID_SERIES = set()
-ID_TEMPORADAS = set()
-ID_EPISODIOS = set()
+qtd_aluno = 200
 
-NOMES_PRODUTORAS = set()
-NOMES_FUNCIONARIOS = set()
-NOMES_SERIES = set()
-NOMES_EPISODIOS = set()
-# /////////////////////
 
-# Listas que possuem dados estaticos
-generos_series = [
-    "Acao",
-    "Aventura",
-    "Comedia",
-    "Drama",
-    "Ficcao Cientifica",
-    "Fantasia",
-    "Misterio",
-    "Suspense",
-    "Terror",
-    "Romance",
-    "Policial",
-    "Crime",
-    "Documentario",
-    "Animacao",
-    "Musical",
-    "Guerra",
-    "Historico",
-    "Esporte",
-    "Super-heroi",
-    "Reality Show"
-]
+qtd_prof = 80
 
-restricao_idade = [
-    "AL",
-    "A10",
-    "A12",
-    "A14",
-    "A16",
-    "A18"
-]
 
-# /////////////////////
+qtd_tcc = (qtd_aluno//2)
 
-# dicionario de lista para ter armazenado os atores 
-# presentes em cada produtora
-atores_por_prod = {
+
+# ///////////////////////////
+
+
+
+
+
+# ///////////////////////////
+
+
+# sets com letras maisusculas
+
+
+# para sinalizar array globais e assim
+
+
+#       evitar repeticoes de elementos unicos
+
+
+
+
+
+NOMES = set()
+
+
+RA = set()
+
+
+TCC = set()
+
+
+DISCIPLINAS_CURSOS = {} 
+
+
+# ///////////////////////////
+
+
+
+
+
+DEPARTAMENTOS = {
+
+
+    "COM" : "Ciencia da Computacao", 
+
+
+    "ELE" : "Engenharia Eletrica", 
+
+
+    "MEC" : "Engenharia Mecanica", 
+
+
+    "ADM" : "Adminstracao", 
+
+
+    "MAT" : "Matematica", 
+
+
+    "FIS" : "Fisica", 
+
 
 }
 
-# /////////////////////
 
-# funcao para gerar id
-# somente para produtoras
-def gerar_id_produtora():
-    while 1:
-        ID = faker.bothify("???###")
 
-        if ID in ID_PRODUTORAS:
-            continue
 
-        ID_PRODUTORAS.add(ID)
 
-        return ID
 
-def gerar_nome_produtora():
-    while 1:
-        nome = faker.company()
 
-        if nome in NOMES_PRODUTORAS:
-            continue
 
-        NOMES_PRODUTORAS.add(nome)
 
-        return nome
 
-# funcao para gerar id
-# somente de funcionarios
-def gerar_id_funcionario():
-    while 1:
-        ID = "".join(random.choices(nums, k=6))
 
-        if ID in ID_FUNCIONARIOS:
-                     continue
-        ID_FUNCIONARIOS.add(ID)
 
-        return ID;
 
-# funcao para gerar 
-# nomes de funcionarios
-def gerar_nome_funcionario():
-    while 1:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CURSOS = {
+
+
+    "CC" : "Ciencia da Computacao",
+
+
+    "EELEC" : "Engenharia Eletrica",
+
+
+    "EMEC" : "Engenharia Mecanica",
+
+
+    "ADM" : "Administracao",
+
+}
+
+
+
+
+DISCIPLINAS = {
+
+
+    # ciencia da Computacao
+
+
+    "COMP001": "Algoritmos e Estruturas de Dados",
+
+
+    "COMP002": "Programacao Orientada a Objetos",
+
+
+    "COMP003": "Banco de Dados",
+
+
+    "COMP004": "Sistemas Operacionais",
+
+
+    "COMP005": "Engenharia de Software",
+
+
+    "COMP006": "Inteligencia Artificial",
+
+
+    "COMP007": "Redes de Computadores",
+
+
+    "COMP008": "Compiladores",
+
+
+    "COMP009": "Seguranca da Informacao",
+
+
+    "COMP010": "Aprendizado de Maquina",
+
+
+
+
+
+    # engenharia Eletrica
+
+
+    "ELEC001": "Circuitos Eletricos",
+
+
+    "ELEC002": "Eletronica Analogica",
+
+
+    "ELEC003": "Eletronica Digital",
+
+
+    "ELEC004": "Sistemas de Controle",
+
+
+    "ELEC005": "Instrumentacao",
+
+
+    "ELEC006": "Conversao de Energia",
+
+
+    "ELEC007": "Eletromagnetismo Aplicado",
+
+
+    "ELEC008": "Instalacoes Eletricas",
+
+
+    "ELEC009": "Energia Solar e Sustentabilidade",
+
+
+
+
+
+    # engenharia Mecanica
+
+
+    "MEC001": "Mecanica dos Solidos",
+
+
+    "MEC002": "Termodinamica",
+
+
+    "MEC003": "Mecanica dos Fluidos",
+
+
+    "MEC004": "Dinamica e Vibracoes",
+
+
+    "MEC005": "Materiais de Engenharia",
+
+
+    "MEC006": "Processos de Fabricacao",
+
+
+    "MEC007": "Projeto Mecanico",
+
+
+    "MEC008": "Desenho Tecnico",
+
+
+    "MEC009": "Automacao Industrial",
+
+
+
+
+
+    # administracao
+
+
+    "ADM001": "Teoria Geral da Administracao",
+
+
+    "ADM002": "Gestao Financeira",
+
+
+    "ADM003": "Contabilidade",
+
+
+    "ADM004": "Comportamento Organizacional",
+
+
+    "ADM005": "Marketing",
+
+
+    "ADM006": "Gestao de Pessoas",
+
+
+    "ADM007": "Planejamento Estrategico",
+
+
+    "ADM008": "Empreendedorismo",
+
+
+    "ADM009": "Gestao da Qualidade",
+
+
+
+
+
+    # matematica
+
+
+    "MAT001": "Calculo I",
+
+
+    "MAT002": "Calculo II",
+
+
+    "MAT003": "Algebra Linear",
+
+
+    "MAT004": "Geometria Analitica",
+
+
+    "MAT005": "Estatistica",
+
+
+    "MAT006": "Matematica Discreta",
+
+
+    "MAT007": "Probabilidade",
+
+
+    "MAT008": "Equacoes Diferenciais",
+
+
+
+
+
+    # fisica
+
+
+    "FIS001": "Fisica I - Mecanica",
+
+
+    "FIS002": "Fisica II - Eletromagnetismo",
+
+
+    "FIS003": "Fisica III - Termodinamica",
+
+
+    "FIS004": "Fisica Moderna",
+
+
+    "FIS005": "Laboratorio de Fisica",
+
+
+}
+
+
+
+
+def gerar_ra():
+
+
+    return "".join(random.choices(nums, k=9))
+
+
+
+
+def lista_nomes(lista, qtd):
+
+
+    while len(lista) < qtd:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         nome = faker.name()
 
-        if nome in NOMES_FUNCIONARIOS:
+
+
+
+        if nome in NOMES:
+
             continue
-        
-        NOMES_FUNCIONARIOS.add(nome)
 
-        return nome
 
-# funcao para gerar 
-# nomes de series
-def gerar_nome_serie():
-    while 1:
+        lista.append(nome)
+
+
+        NOMES.add(nome)
+
+
+
+
+
+
+def lista_ra(lista, qtd):
+
+
+    while len(lista) < qtd:
+
+
+        ra = gerar_ra()
+
+
+
+
+
+
+        if ra in RA:
+
+            continue
+
+
+        lista.append(ra)
+
+
+        RA.add(ra)
+
+
+
+
+def gerar_professores():
+
+
+    # cria duas listas em que o nome do prof
+
+
+    # estara com o ra associado ao 
+
+
+    # ao msm indice listas
+
+
+
+
+    nome_profs = []
+
+
+    ra_profs = []
+
+
+    
+
+
+    lista_nomes(nome_profs, qtd_prof)
+
+
+    lista_ra(ra_profs, qtd_prof)
+
+
+    
+
+
+    professores = []
+
+
+
+
+    for i in range(qtd_prof):
+
+
+        professores.append({
+
+
+            "ra" : ra_profs[i],
+
+
+            "nome_professor" : nome_profs[i].split()[0],
+
+
+            "sobrenome_professor" : nome_profs[i].split()[-1]
+
+
+        })
+
+
+
+
+    return professores
+
+
+
+
+def gerar_departamentos():
+
+
+    departamentos = []
+
+
+    codigos = list(DEPARTAMENTOS.keys())
+
+
+    
+
+
+    for i in range(len(codigos)):
+
+
+        nome_depart = DEPARTAMENTOS[codigos[i]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        # gera departamentos com ids e nomes fixos
+
+
+        # porem com pros selecionados aleatoriamente
+
+
+        departamentos.append({
+
+
+            "id_departamento" : codigos[i],
+
+
+            "nome_departamento" : nome_depart,
+
+
+            # nao vai dar conflito com ra de alunos
+
+
+            # pois o codigo ate aq somente gerou ras de profs
+
+
+            "ra_chefe_departamento" : faker.random_element(list(RA))
+
+
+        })
+
+
+    return departamentos
+
+
+
+
+
+def gerar_cursos():
+
+
+    cursos = []
+
+
+    codigos = list(CURSOS.keys())
+
+
+
+
+
+    for i in range(len(codigos)):
+
+
+        nome_curso = CURSOS[codigos[i]]
+
+
+
+
+
+        # gera cursos com ids e nomes fixos
+
+
+        # e seleciona um cordenador de maneira aleatoria
+
+
+
+
+
+        cursos.append({
+
+
+            "id_curso" : codigos[i],
+
+
+            "nome_curso" : nome_curso,
+
+
+            # nao vai dar conflito com ra de alunos
+
+
+            # pois o codigo ate aq somente gerou ras de profs
+
+
+            "ra_cordenador_curso" : faker.random_element(list(RA))
+
+
+        })
+
+
+    return cursos
+
+
+
+
+
+def gerar_disciplinas():
+
+
+    codigo_disciplinas = list(DISCIPLINAS.keys())
+
+
+    disciplinas = []
+
+
+
+
+
+    for codigo in codigo_disciplinas:
+
+
+        nome = DISCIPLINAS[codigo]
+
+
+        cursos_possiveis = random.sample(list(CURSOS.keys()), k=random.randint(1, 2))
+
+
+        DISCIPLINAS_CURSOS[codigo] = cursos_possiveis
+
+
+
+
+
+        disciplinas.append({
+
+
+            "id_disciplina": codigo,
+
+
+            "nome_disciplina": nome,
+
+
+            "ra_professor": faker.random_element(list(RA)),
+
+
+            "id_departamento": codigo[:3]
+
+
+        })
+
+
+
+
+
+    return disciplinas
+
+
+
+
+
+def gerar_tcc():
+
+
+    tccs = []
+
+
+    nomes_tccs = set()
+
+
+
+
+
+    while len(tccs) < qtd_tcc:
+
+
+        id_tcc = faker.bothify("??###") 
+
+
         nome = faker.catch_phrase()
 
-        if nome in NOMES_SERIES:
+
+
+
+        if id_tcc in TCC or nome in nomes_tccs:
+
+
+
+
+
             continue
 
-        NOMES_SERIES.add(nome)
 
-        return nome
 
-# funcao para gerar 
-# nomes dos episodios 
-def gerar_nome_episodio():
-    while 1:
-        nome = faker.catch_phrase()
 
-        if nome in NOMES_EPISODIOS:
-            continue
 
-        NOMES_SERIES.add(nome)
 
-        return nome
+        tccs.append({
 
-# funcao para gerar
-# ids para series
-def gerar_id_series():
-    while 1:
-        ID = faker.bothify("??###?")
 
-        if ID in ID_SERIES:
-            continue
+            "id_tcc" : id_tcc,
 
-        ID_SERIES.add(ID)
 
-        return ID
+            "nome_trabalho" : nome,
 
-def gerar_id_temporadas():
-    while 1:
-        ID = faker.bothify("??###")
 
-        if ID in ID_TEMPORADAS:
-            continue
-        
-        ID_TEMPORADAS.add(ID)
+            "data" : faker.date_this_decade(),
 
-        return ID
 
-def gerar_id_episodios():
-    while 1:
-        ID = faker.bothify("???##")
+            # nao vai dar conflito com ra de alunos
 
-        if ID in ID_EPISODIOS:
-            continue
-        
-        ID_EPISODIOS.add(ID)
 
-        return ID
+            # pois o codigo ate aq somente gerou ras de profs
 
-def gerar_salario():
-    return round(random.uniform(1500, 20000), 2)
 
-def gerar_genero():
-    return faker.random_element(generos_series)
+            "ra_orientador" : faker.random_element(list(RA)),
 
-def gerar_restricao_idade():
-    return faker.random_element(restricao_idade)
 
-def gerar_produtoras():
-    produtoras = []
+            "status" : faker.random_element(["Aprovado", "Reprovado", "Em andamento"])
 
-    for i in range(qtd_produtoras):
-        id_prod = gerar_id_produtora()
 
-        produtoras.append({
-            "id_prod" : id_prod,
-            "nome_produtora" : gerar_nome_produtora(),
-            "CEO" : gerar_nome_funcionario()
+        })
+
+
+    return tccs
+
+
+
+
+
+def gerar_alunos():
+
+
+    nome_alunos = []
+
+
+    ra_alunos = []
+
+
+
+
+
+    lista_nomes(nome_alunos, qtd_aluno)
+
+
+    lista_ra(ra_alunos, qtd_aluno)
+
+
+
+
+
+    ids_curso = list(CURSOS.keys())
+
+
+    
+
+
+    alunos = []
+
+
+
+
+
+    for i in range(len(nome_alunos)):
+
+
+        alunos.append({
+
+
+            "ra" : ra_alunos[i],
+
+
+            "nome_aluno" : nome_alunos[i].split()[0],
+
+
+            "sobrenome_aluno" : nome_alunos[i].split()[-1],
+
+
+            "id_curso" : faker.random_element(list(CURSOS.keys())),
+
+
+            "semestre" : random.randint(1,8)
+
+
+        })
+
+
+    return alunos
+
+
+
+
+
+def gerar_historico_aluno(Aluno, Disciplina):
+
+
+    historico_aluno = []
+
+
+
+
+
+    disciplina_por_id = {d["id_disciplina"]: d for d in Disciplina}
+
+
+
+
+
+    for aluno in Aluno:
+
+
+        selecionadas = []
+
+
+        ra = aluno["ra"]
+
+
+        curso = aluno["id_curso"]
+
+
+        semestre = aluno["semestre"]
+
+
+        qtd_disciplinas = 4 * semestre
+
+
+
+
+
+        # filtra disciplinas de acordo com o curso do aluno
+
+
+        disciplinas_validas = [
+
+
+            d for d in Disciplina
+
+
+            if curso in DISCIPLINAS_CURSOS.get(d["id_disciplina"], [])
+
+
+        ]
+
+
+
+
+
+        if not disciplinas_validas:
+
+
+            continue  
+
+
+
+
+
+        while len(selecionadas) < qtd_disciplinas and len(selecionadas) < len(disciplinas_validas):
+
+
+            disciplina = faker.random_element(disciplinas_validas)
+
+
+            idd = disciplina["id_disciplina"]
+
+
+
+
+
+            if idd in selecionadas:
+
+
+                continue
+
+
+
+
+
+            selecionadas.append(idd)
+
+
+            media = random.uniform(0, 10)
+
+
+            situacao = "Aprovado" if media >= 5.0 else "Reprovado"
+
+
+            semestre = random.randint(1, semestre)
+
+
+
+
+
+            historico_aluno.append({
+
+
+                "ra_aluno": ra,
+
+
+                "id_disciplina": idd,
+
+
+                "media": media,
+
+
+                "semestre": semestre,
+
+
+                "situacao": situacao
+
+
             })
-        atores_por_prod[id_prod] = []
-    return produtoras
 
-def id_produtora_aleatoria(produtoras):
-    ID = faker.random_element(produtoras)["id_prod"]
-    return ID
 
-def gerar_diretores(produtoras):
-    diretores = []
 
-    for i in range(qtd_diretores):
-        diretores.append({
-            "id_diretor" : gerar_id_funcionario(),
-            "nome" : gerar_nome_funcionario(),
-            "salario" : gerar_salario(),
-            "id_prod" : id_produtora_aleatoria(produtoras)
+
+            # se reprovado, repete com nova nota
+
+
+            # no semestre seguinte
+
+
+            if media < 5:
+
+
+                historico_aluno.append({
+
+
+                    "ra_aluno": ra,
+
+
+                    "id_disciplina": idd,
+
+
+                    "media": random.uniform(5, 10),
+
+
+                    "semestre": semestre+1,
+
+
+                    "situacao": "Aprovado"
+
+
+                })
+
+
+
+
+    return historico_aluno
+
+
+
+
+
+def gerar_tcc_aluno(Aluno, TCC):
+
+
+    tcc_aluno = []
+
+
+
+
+    for i in range(len(TCC)):
+
+
+        ra = Aluno[i]["ra"]
+
+
+        idd_tcc = TCC[i]["id_tcc"]
+
+
+
+
+        tcc_aluno.append({
+
+
+            "ra_aluno" : ra,
+
+
+            "id_tcc" : idd_tcc
+
+
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    for i in range(len(TCC), len(Aluno)):
+
+
+        ra = Aluno[i]["ra"]
+
+
+        idd_tcc = faker.random_element(TCC)["id_tcc"]
+
+
+
+
+        tcc_aluno.append({
+
+
+            "ra_aluno" : ra,
+
+
+            "id_tcc" : idd_tcc
+
+
+        })
+
+
+
+
+    return tcc_aluno
+
+
+
+
+
+def gerar_historico_professor(Professor, Disciplina):
+
+
+    historico_professor = []
+
+
+
+
+    for prof in Professor:
+
+
+        ra = prof["ra"]
+
+
+
+
+        qtd = random.randint(1, 10)
+
+
+
+
+
+
+
+
+
+
+
+
+
+        for i in range(qtd):
+
+
+            disciplina = faker.random_element(Disciplina)
+
+
+
+
+            historico_professor.append({
+
+
+                "ra_professor" : ra,
+
+
+                "id_disciplina" : disciplina["id_disciplina"],
+
+
+                "data" : faker.date_this_decade(),
+
+
+                "situacao" : faker.random_element(["Aplicando", "Nao aplicando"])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             })
-    return diretores
- 
-def gerar_atores(produtoras):
-    atores = []
 
-    for i in range(qtd_atores):
-        id_prod = id_produtora_aleatoria(produtoras)
-        id_ator = gerar_id_funcionario()
 
-        atores.append({
-            "id_ator" : id_ator,
-            "nome" : gerar_nome_funcionario(),
-            "salario" : gerar_salario(),
-            "id_prod" : id_prod
-            })
-        
-        atores_por_prod[id_prod].append(id_ator)
-    return atores
+    return historico_professor
 
-def diretor_aleatorio(diretores):
-    return faker.random_element(diretores)
 
-def restricao_aleatoria():
-    return faker.random_element(restricao_idade)
-
-def genero_aleatorio():
-    return faker.random_element(generos_series)
-
-def gerar_series(diretores):
-    series = []
-
-    for i in range(qtd_series):
-        diretor = diretor_aleatorio(diretores)
-
-        series.append({
-            "id_serie" : gerar_id_series(),
-            "nome" : gerar_nome_serie(),
-            "restricao_idade" : restricao_aleatoria(),
-            "genero" : genero_aleatorio(),
-            "qtd_temporadas" : random.randint(1, 5),
-            "id_prod" : diretor["id_prod"],
-            "id_diretor" : diretor["id_diretor"]
-            })
-    return series
-
-def gerar_temporadas(series):
-    temporadas = []
-
-    for serie in series:
-        
-        for i in range(serie["qtd_temporadas"]): 
-            ID = gerar_id_temporadas()
-            id_prod = serie["id_prod"]
-
-            temporadas.append({
-                "id_temp" : ID,
-                "qtd_ep" : random.randint(1, 12), 
-                "nota_avaliacao" : round(random.uniform(0, 10), 2),
-                "numero_temp" : i+1,
-                "id_serie" : id_prod,
-                "id_ator" : faker.random_element(atores_por_prod[id_prod])
-                 })
-    return temporadas
-
-def gerar_episodios(temporadas):
-    episodios = []
-
-    for temporada in temporadas:
-        id_temp = temporada["id_temp"]
-        for i in range(temporada["qtd_ep"]):
-            ID = gerar_id_episodios()
-            titulo = gerar_nome_episodio()
-        episodios.append({
-            "id_ep" : ID, 
-            "titulo" : titulo,
-            "duracao" : random.randint(20, 100),
-            "nota_avaliacao" : round(random.uniform(0, 10), 2),
-            "id_temp" : id_temp
-            })
-    return episodios
 
 def exportar_csv(nome_arquivo, lista_dicionarios):
+
     if not lista_dicionarios:
+
         print(f"[!] Lista vazia, não exportou: {nome_arquivo}")
+
         return
+
+
+    
 
     os.makedirs("DadosCsv", exist_ok=True)
 
+
+    
+
     caminho = os.path.join("DadosCsv", nome_arquivo)
 
+
+
     with open(caminho, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=lista_dicionarios[0].keys())
-        writer.writeheader()
-        writer.writerows(lista_dicionarios)
+
+@@ -357,22 +318,16 @@ def exportar_csv(nome_arquivo, lista_dicionarios):
+
     print(f"[✓] Exportado: {nome_arquivo}")
 
+
+
 if __name__ == "__main__":
-    produtoras = gerar_produtoras()
-    diretores = gerar_diretores(produtoras)
-    atores = gerar_atores(produtoras)
-    series = gerar_series(diretores)
-    temporadas = gerar_temporadas(series)
-    episodios = gerar_episodios(temporadas)
-    
-    exportar_csv("Produtora", produtoras)
-    exportar_csv("Diretor", diretores)
-    exportar_csv("Ator", atores)
-    exportar_csv("Serie", series)
-    exportar_csv("Temporada", temporadas)
-    exportar_csv("Episodio", episodios)
+
+
+    Professor = gerar_professores()
+
+
+    Departamento = gerar_departamentos()
+
+
+    Curso = gerar_cursos() 
+
+
+    Disciplina = gerar_disciplinas()
+
+
+    TCC = gerar_tcc()
+
+
+    Aluno = gerar_alunos()
+
+
+    Historico_escolar = gerar_historico_aluno(Aluno, Disciplina)
+
+
+    TCC_aluno = gerar_tcc_aluno(Aluno, TCC)
+
+
+    Historico_Professor = gerar_historico_professor(Professor, Disciplina)
+
+
+
+
+    exportar_csv("professores.csv", Professor)
+
+
+    exportar_csv("departamentos.csv", Departamento)
+
+
+    exportar_csv("cursos.csv", Curso)
+
+
+    exportar_csv("disciplinas.csv", Disciplina)
+
+
+    exportar_csv("tcc.csv", TCC)
+
+
+    exportar_csv("alunos.csv", Aluno)
+
+
+    exportar_csv("historico_aluno.csv", Historico_escolar)
+
+
+    exportar_csv("tcc_aluno.csv", TCC_aluno)
+
+
+    exportar_csv("historico_professor.csv", Historico_Professor)
